@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiClient } from '../clients/api';
+import ErrorMessage from '../components/ui/ErrorMessages';
+import Spinner from '../components/ui/Spinner';
 import type { Project } from '../types';
 
 export function ProjectPage() {
@@ -30,7 +32,7 @@ export function ProjectPage() {
     fetchProjects();
   }, []);
 
-  if (loading) return <div className='text-3xl text-white'>Loading...</div>;
+  if (loading) return <Spinner />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,11 +80,11 @@ export function ProjectPage() {
         <input
           type='submit'
           value='Create Project'
-          className='mt-auto bg-sky-500 rounded'
+          className='mt-auto inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md'
         />
       </form>
 
-      {error && <div>{error}</div>}
+      {error && <ErrorMessage message={error} />}
 
       <div className='w-full flex gap-5 mt-10'>
         {projects &&
@@ -95,7 +97,7 @@ export function ProjectPage() {
               <div>{project.description}</div>
               <Link
                 to={`/projects/${project._id}`}
-                className='mt-auto bg-sky-500 rounded'
+                className='mt-auto inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md'
               >
                 See Project
               </Link>
