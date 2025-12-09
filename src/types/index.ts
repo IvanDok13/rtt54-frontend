@@ -24,3 +24,11 @@ export interface AuthContextType {
 export interface AuthProviderProps {
   children: React.ReactNode;
 }
+
+export interface EmptyStateProps {
+  text?: string;
+}
+
+export interface ErrorMessageProps {
+  message?: string;
+}

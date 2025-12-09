@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiClient } from '../clients/api';
+import ErrorMessage from '../components/ui/ErrorMessages';
+import Spinner from '../components/ui/Spinner';
 import type { Project } from '../types/index';
 
 export function ProjectDetailsPage() {
@@ -29,8 +31,8 @@ export function ProjectDetailsPage() {
   return (
     <div className='text-white p-5'>
       <h1 className='text-4xl'>Project details</h1>
-      {error && <div>{error}</div>}
-      {loading && <div>Loading...</div>}
+      {error && <ErrorMessage message={error} />}
+      {loading && <Spinner />}
       {project && <div>{project.name}</div>}
       {project && <div>{project.description}</div>}
     </div>
