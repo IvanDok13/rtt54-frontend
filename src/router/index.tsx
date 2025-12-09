@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
 
       { path: 'projects/:projectId', element: <ProjectDetailsPage /> },
 
-      { path: 'users/login', element: <LoginPage /> },
+      { path: 'login', element: <LoginPage /> },
 
       // { path: 'users/register', element: <RegisterPage /> },
 
