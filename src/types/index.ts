@@ -4,6 +4,16 @@ export interface Project {
   _id: string;
 }
 
+export type TaskStatus = 'todo' | 'in-progress' | 'done';
+
+export interface Task {
+  title: string;
+  description: string;
+  projectId: string;
+  status: TaskStatus;
+  _id: string;
+}
+
 export interface User {
   _id: string;
   username: string;
@@ -31,4 +41,14 @@ export interface EmptyStateProps {
 
 export interface ErrorMessageProps {
   message?: string;
+}
+
+export interface FormDataShape {
+  title: string;
+  description: string;
+  status: TaskStatus;
+}
+
+export interface TaskFormProps {
+  onSubmit: (data: FormDataShape) => void;
 }
