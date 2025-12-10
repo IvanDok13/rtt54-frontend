@@ -1,63 +1,50 @@
-import { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiClient } from '../clients/api';
 import ErrorMessage from '../components/ui/ErrorMessages';
 import Spinner from '../components/ui/Spinner';
+import { AuthContext } from '../context/AuthProvider';
 
 export function LoginPage() {
+  const auth = useContext(AuthContext);
+  if (!auth) throw new Error('AuthContext not found');
+
+  const { logIn, register } = auth;
+
   const [showRegister, setShowRegister] = useState(true);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       setError('');
       setLoading(true);
-      // api call here
-      const res = await apiClient.post('/api/users/login', {
-        email,
-        password,
-      });
-      console.log('Login successful:', res.data);
 
-      localStorage.setItem('token', JSON.stringify(res.data.token));
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-
+      await logIn(email, password);
       navigate('/projects');
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.error(error.message);
-      setError(error.message);
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       setError('');
       setLoading(true);
-      // api call here
-      const res = await apiClient.post('/api/users/register', {
-        username,
-        email,
-        password,
-      });
-      console.log('Registration successful:', res.data);
 
-      localStorage.setItem('token', JSON.stringify(res.data.token));
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-
+      await register(username, email, password);
       navigate('/projects');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.error(error.message);
-      setError(error.message);
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -83,10 +70,11 @@ export function LoginPage() {
             <input
               type='text'
               name='username'
-              id=''
+              id='username'
               value={username}
               onChange={e => setUsername(e.target.value)}
               className='ml-2 border rounded'
+              required
             />
           </label>
           <label htmlFor='email'>
@@ -94,10 +82,11 @@ export function LoginPage() {
             <input
               type='text'
               name='email'
-              id=''
+              id='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
               className='ml-10 border rounded'
+              required
             />
           </label>
           <label htmlFor='password'>
@@ -105,18 +94,21 @@ export function LoginPage() {
             <input
               type='password'
               name='password'
-              id=''
+              id='password'
               value={password}
               onChange={e => setPassword(e.target.value)}
               className='ml-3 border rounded'
+              required
             />
           </label>
 
-          <input
+          <button
             type='submit'
             value='Register'
             className='border py-2 px-4 rounded'
-          />
+          >
+            Register
+          </button>
 
           {loading && <Spinner />}
         </form>
@@ -131,10 +123,11 @@ export function LoginPage() {
             <input
               type='text'
               name='email'
-              id=''
+              id='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
               className='ml-10 border rounded'
+              required
             />
           </label>
           <label htmlFor='password'>
@@ -142,17 +135,20 @@ export function LoginPage() {
             <input
               type='password'
               name='password'
-              id=''
+              id='password'
               value={password}
               onChange={e => setPassword(e.target.value)}
               className='ml-3 border rounded'
+              required
             />
           </label>
-          <input
+          <button
             type='submit'
             value='Register'
             className='border py-2 px-4 rounded'
-          />
+          >
+            Login
+          </button>
 
           {loading && <Spinner />}
         </form>
