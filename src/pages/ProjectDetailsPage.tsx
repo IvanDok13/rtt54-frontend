@@ -3,9 +3,14 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiClient } from '../clients/api';
 import { TaskForm } from '../components/TasksComponent/TaskForm';
+
 import EmptyState from '../components/ui/EmptyState';
 import ErrorMessage from '../components/ui/ErrorMessages';
 import Spinner from '../components/ui/Spinner';
+
+import TaskEditComponent from '../components/TasksComponent/TaskEditComponent';
+import TaskItemComponent from '../components/TasksComponent/TaskItemComponent';
+
 import type { FormDataShape, Project, Task } from '../types/index';
 
 export function ProjectDetailsPage() {
@@ -15,6 +20,13 @@ export function ProjectDetailsPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const { projectId } = useParams();
 
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<FormDataShape>({
+    title: '',
+    description: '',
+    status: 'todo',
+  });
+
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
@@ -22,7 +34,6 @@ export function ProjectDetailsPage() {
         const res = await apiClient.get(`/api/projects/${projectId}`);
         setProject(res.data);
       } catch (error: any) {
-        console.error(error);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -54,7 +65,6 @@ export function ProjectDetailsPage() {
     try {
       setLoading(true);
       await apiClient.delete(`/api/projects/${projectId}/tasks/${taskId}`);
-
       setTasks(prev => prev.filter(task => task._id !== taskId));
     } catch (error: any) {
       setError(error.message);
@@ -72,11 +82,40 @@ export function ProjectDetailsPage() {
         data
       );
 
-      console.log('FORM RECEIVED:', data);
-
       setTasks(prev => [...prev, res.data]);
     } catch (error: any) {
-      console.log(error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const startEditing = (task: Task) => {
+    setEditingTaskId(task._id);
+    setEditForm({
+      title: task.title,
+      description: task.description,
+      status: task.status,
+    });
+  };
+
+  const cancelEditing = () => setEditingTaskId(null);
+
+  const handleUpdateTask = async (taskId: string) => {
+    try {
+      setLoading(true);
+
+      const res = await apiClient.put(
+        `/api/projects/${projectId}/tasks/${taskId}`,
+        editForm
+      );
+
+      setTasks(prev =>
+        prev.map(task => (task._id === taskId ? res.data : task))
+      );
+
+      setEditingTaskId(null);
+    } catch (error: any) {
       setError(error.message);
     } finally {
       setLoading(false);
@@ -104,23 +143,25 @@ export function ProjectDetailsPage() {
       {tasks.length === 0 && <EmptyState text='No tasks found.' />}
 
       <ul>
-        {tasks.map(task => (
-          <li
-            key={task._id}
-            className='border border-gray-600 p-2 mt-2 rounded'
-          >
-            <div className='font-bold'>{task.title}</div>
-            <div className='text-gray-300'>{task.description}</div>
-            <div>Status: {task.status}</div>
-
-            <button
-              onClick={() => handleDeleteTask(task._id)}
-              className='px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded'
-            >
-              Delete
-            </button>
-          </li>
-        ))}
+        {tasks.map(task =>
+          editingTaskId === task._id ? (
+            <TaskEditComponent
+              key={task._id}
+              task={task}
+              editForm={editForm}
+              setEditForm={setEditForm}
+              cancelEditing={cancelEditing}
+              handleUpdateTask={handleUpdateTask}
+            />
+          ) : (
+            <TaskItemComponent
+              key={task._id}
+              task={task}
+              onEdit={() => startEditing(task)}
+              onDelete={() => handleDeleteTask(task._id)}
+            />
+          )
+        )}
       </ul>
     </div>
   );
