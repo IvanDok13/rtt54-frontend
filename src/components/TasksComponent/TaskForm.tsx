@@ -28,7 +28,7 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-3 text-black my-4'>
+    <form onSubmit={handleSubmit} className='space-y-3 text-white my-4'>
       <div>
         <label htmlFor='title' className='block text-sm mb-1'>
           Title
@@ -40,7 +40,7 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
           onChange={handleChange}
           placeholder='Task title'
           required
-          className='w-full px-3 py-2 rounded-xl border dark:border-neutral-700 bg-white dark:bg-neutral-800'
+          className='w-full px-3 py-2 rounded-xl border dark:border-neutral-700 bg-white dark:bg-neutral-800 text-black'
         />
       </div>
 
@@ -52,7 +52,7 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
           value={form.description}
           onChange={handleChange}
           placeholder='Description'
-          className='w-full px-3 py-2 rounded-xl border dark:border-neutral-700 bg-white dark:bg-neutral-800'
+          className='w-full px-3 py-2 rounded-xl border dark:border-neutral-700 bg-white dark:bg-neutral-800 text-black'
         />
       </div>
 
@@ -73,7 +73,12 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
       </div>
 
       <div className='flex items-center gap-2'>
-        <button type='submit'>Add Task</button>
+        <button
+          className='px-3 py-1 bg-yellow-600 hover:bg-yellow-700 rounded'
+          type='submit'
+        >
+          Add Task
+        </button>
       </div>
     </form>
   );
