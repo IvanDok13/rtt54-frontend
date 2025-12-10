@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { apiClient } from '../clients/api';
+import ErrorMessage from '../components/ui/ErrorMessages';
+import Spinner from '../components/ui/Spinner';
 
 export function LoginPage() {
   const [showRegister, setShowRegister] = useState(true);
@@ -7,12 +11,24 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       setError('');
       setLoading(true);
       // api call here
+      const res = await apiClient.post('/api/users/login', {
+        email,
+        password,
+      });
+      console.log('Login successful:', res.data);
+
+      localStorage.setItem('token', JSON.stringify(res.data.token));
+      localStorage.setItem('user', JSON.stringify(res.data.user));
+
+      navigate('/projects');
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error(error.message);
@@ -27,6 +43,17 @@ export function LoginPage() {
       setError('');
       setLoading(true);
       // api call here
+      const res = await apiClient.post('/api/users/register', {
+        username,
+        email,
+        password,
+      });
+      console.log('Registration successful:', res.data);
+
+      localStorage.setItem('token', JSON.stringify(res.data.token));
+      localStorage.setItem('user', JSON.stringify(res.data.user));
+
+      navigate('/projects');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error(error.message);
@@ -42,10 +69,8 @@ export function LoginPage() {
         Start managing your projects.
       </h1>
 
-      {/* ERROR  */}
-      {error && <div>{error}</div>}
+      {error && <ErrorMessage message={error} />}
 
-      {/* FORM  */}
       {showRegister ? (
         <form
           onSubmit={handleRegister}
@@ -93,8 +118,7 @@ export function LoginPage() {
             className='border py-2 px-4 rounded'
           />
 
-          {/* LOADING  */}
-          {loading && <div className='animate-pulse'>...</div>}
+          {loading && <Spinner />}
         </form>
       ) : (
         <form
@@ -130,8 +154,7 @@ export function LoginPage() {
             className='border py-2 px-4 rounded'
           />
 
-          {/* LOADING  */}
-          {loading && <div className='animate-pulse'>...</div>}
+          {loading && <Spinner />}
         </form>
       )}
 
