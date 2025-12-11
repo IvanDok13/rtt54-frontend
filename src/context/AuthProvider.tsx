@@ -104,6 +104,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     setToken(null);
 
     delete apiClient.defaults.headers.common['Authorization'];
+    console.log('Logged out successfully');
+
+    return null;
   };
 
   return (
