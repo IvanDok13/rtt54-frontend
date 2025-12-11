@@ -2,17 +2,15 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiClient } from '../clients/api';
+import { ProjectForm } from '../components/ProjectComponent/ProjectForm';
 import ErrorMessage from '../components/ui/ErrorMessages';
 import Spinner from '../components/ui/Spinner';
-import type { Project } from '../types';
+import type { Project, ProjectDataShape } from '../types';
 
 export function ProjectPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
 
   const [showSpinner, setShowSpinner] = useState(true);
 
@@ -39,28 +37,27 @@ export function ProjectPage() {
 
   if (loading || showSpinner) return <Spinner />;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      setLoading(true);
-      const res = await apiClient.post('/api/projects', { name, description });
-      setProjects(prev => [...prev, res.data]);
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-      setName('');
-      setDescription('');
-    }
-  };
-
   const handleDelete = async (projectId: string) => {
     try {
       setError('');
       setLoading(true);
       await apiClient.delete(`/api/projects/${projectId}`);
       setProjects(prev => prev.filter(task => task._id !== projectId));
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateProject = async (data: ProjectDataShape) => {
+    try {
+      setError('');
+      setLoading(true);
+
+      const res = await apiClient.post(`/api/projects/${projects}/tasks`, data);
+
+      setProjects(prev => [...prev, res.data]);
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -91,49 +88,7 @@ export function ProjectPage() {
 
       {error && <ErrorMessage message={error} />}
 
-      <form
-        onSubmit={handleSubmit}
-        className='
-          border border-[#00ff88] p-4 rounded mb-10
-          shadow-[0_0_12px_#00ff88]
-          space-y-3
-        '
-      >
-        <label className='text-[#66ffbb] text-sm'>{'>'} PROJECT NAME</label>
-        <input
-          type='text'
-          className='
-            w-full bg-black/80 border border-[#00ff88] rounded p-2
-            text-[#00ff88] focus:outline-none
-            shadow-[0_0_8px_#00ff88]
-          '
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
-
-        <label className='text-[#66ffbb] text-sm'>
-          {'>'} PROJECT DESCRIPTION
-        </label>
-        <textarea
-          className='
-            w-full bg-black/80 border border-[#00ff88] rounded p-2
-            text-[#00ff88] focus:outline-none
-            shadow-[0_0_8px_#00ff88]
-          '
-          onChange={e => setDescription(e.target.value)}
-          value={description}
-        ></textarea>
-
-        <button
-          type='submit'
-          className='
-            bg-[#00ff88] text-black font-bold py-2 px-4 rounded
-            hover:bg-[#00ffaa] transition shadow-[0_0_10px_#00ff88]
-          '
-        >
-          CREATE PROJECT
-        </button>
-      </form>
+      <ProjectForm onSubmit={handleCreateProject} />
 
       <h2 className='text-2xl mb-4 tracking-wide'>{'>'} ACTIVE PROJECTS</h2>
 

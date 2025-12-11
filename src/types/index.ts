@@ -4,6 +4,20 @@ export interface Project {
   _id: string;
 }
 
+export interface ProjectForm {
+  name: string;
+  description: string;
+}
+
+export interface ProjectFormDataShape {
+  onSubmit: (data: ProjectForm) => void;
+}
+
+export interface ProjectDataShape {
+  name: string;
+  description: string;
+}
+
 export type TaskStatus = 'todo' | 'in-progress' | 'done';
 
 export interface Task {
