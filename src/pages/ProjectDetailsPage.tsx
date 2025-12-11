@@ -30,6 +30,7 @@ export function ProjectDetailsPage() {
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
+        setError('');
         setLoading(true);
         const res = await apiClient.get(`/api/projects/${projectId}`);
         setProject(res.data);
@@ -48,6 +49,7 @@ export function ProjectDetailsPage() {
 
     const fetchTasks = async () => {
       try {
+        setError('');
         setLoading(true);
         const res = await apiClient.get(`/api/projects/${projectId}/tasks`);
         setTasks(res.data);
@@ -63,6 +65,7 @@ export function ProjectDetailsPage() {
 
   const handleDeleteTask = async (taskId: string) => {
     try {
+      setError('');
       setLoading(true);
       await apiClient.delete(`/api/projects/${projectId}/tasks/${taskId}`);
       setTasks(prev => prev.filter(task => task._id !== taskId));
@@ -75,6 +78,7 @@ export function ProjectDetailsPage() {
 
   const handleCreateTask = async (data: FormDataShape) => {
     try {
+      setError('');
       setLoading(true);
 
       const res = await apiClient.post(
@@ -103,6 +107,7 @@ export function ProjectDetailsPage() {
 
   const handleUpdateTask = async (taskId: string) => {
     try {
+      setError('');
       setLoading(true);
 
       const res = await apiClient.put(
@@ -123,22 +128,34 @@ export function ProjectDetailsPage() {
   };
 
   return (
-    <div className='text-white p-5 w-full h-full background-gradient'>
-      <h1 className='text-4xl'>Project Details</h1>
+    <div
+      className='min-h-screen p-6 relative
+        bg-[#0a0f0a] text-[#00ff88]
+        font-mono'
+    >
+      <h1 className='text-4xl mb-6 font-bold tracking-widest flex items-center gap-2 drop-shadow-[0_0_6px_#00ff88]'>
+        Project Details
+      </h1>
 
       {error && <ErrorMessage message={error} />}
       {loading && <Spinner />}
 
       {project && (
-        <div className='text-white flex flex-col border border-red-500 p-2 text-center rounded'>
-          <div className='font-bold'>{project.name}</div>
-          <div>{project.description}</div>
+        <div
+          className='flex flex-col border border-[#00ff88] p-4 rounded mb-10
+          shadow-[0_0_12px_#00ff88]
+          space-y-3'
+        >
+          <div className='text-2xl mb-4 tracking-wide'>{project.name}</div>
+          <div className='text-2xl mb-4 tracking-wide'>
+            {project.description}
+          </div>
 
           <TaskForm onSubmit={handleCreateTask} />
         </div>
       )}
 
-      <h2 className='text-2xl mt-6'>Tasks</h2>
+      <h2 className='text-2xl mb-4 tracking-wide'>Tasks</h2>
 
       {tasks.length === 0 && <EmptyState text='No tasks found.' />}
 

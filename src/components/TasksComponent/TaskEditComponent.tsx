@@ -8,15 +8,23 @@ export default function TaskEditComponent({
   handleUpdateTask,
 }: TaskEditProps) {
   return (
-    <li className='border border-gray-600 p-3 mt-2 rounded space-y-2'>
+    <li
+      className='border border-[#00ff88] p-4 rounded mb-10
+          shadow-[0_0_12px_#00ff88]
+          space-y-3'
+    >
       <input
-        className='w-full px-2 py-1 text-white rounded'
+        className='w-full bg-black/80 border border-[#00ff88] rounded p-2
+            text-[#81e2b5] focus:outline-none
+            shadow-[0_0_8px_#00ff88]'
         value={editForm.title}
         onChange={e => setEditForm({ ...editForm, title: e.target.value })}
       />
 
       <textarea
-        className='w-full px-2 py-1 text-white rounded'
+        className='w-full bg-black/80 border border-[#00ff88] rounded p-2
+            text-[#81e2b5] focus:outline-none
+            shadow-[0_0_8px_#00ff88]'
         value={editForm.description}
         onChange={e =>
           setEditForm({ ...editForm, description: e.target.value })
@@ -24,7 +32,9 @@ export default function TaskEditComponent({
       />
 
       <select
-        className='px-2 py-1 text-white rounded'
+        className='w-full bg-black/80 border border-[#00ff88] rounded p-2
+            text-[#81e2b5] focus:outline-none
+            shadow-[0_0_8px_#00ff88]'
         value={editForm.status}
         onChange={e =>
           setEditForm({
@@ -41,14 +51,16 @@ export default function TaskEditComponent({
       <div className='flex gap-2 mt-2'>
         <button
           onClick={() => handleUpdateTask(task._id)}
-          className='px-3 py-1 bg-green-600 hover:bg-green-700 rounded'
+          className='bg-green-600 text-black font-bold py-2 px-4 rounded
+            hover:bg-green-300 transition shadow-[0_0_10px_#00ff88]'
         >
           Save
         </button>
 
         <button
           onClick={cancelEditing}
-          className='px-3 py-1 bg-gray-500 hover:bg-gray-600 rounded'
+          className='bg-gray-500 text-black font-bold py-2 px-4 rounded
+            hover:bg-gray-300 transition shadow-[0_0_10px_#00ff88]'
         >
           Cancel
         </button>

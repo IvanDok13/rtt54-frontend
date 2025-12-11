@@ -51,9 +51,13 @@ export function LoginPage() {
   };
 
   return (
-    <div className='text-white flex flex-col items-center justify-center'>
-      <h1 className='text-3xl font-bold mt-10 text-center'>
-        Start managing your projects.
+    <div
+      className='min-h-screen p-6 relative
+        bg-[#0a0f0a] text-[#00ff88]
+        font-mono flex flex-col items-center gap-4'
+    >
+      <h1 className='text-4xl mb-6 font-bold tracking-widest flex items-center gap-2 drop-shadow-[0_0_6px_#00ff88]'>
+        Start managing your projects
       </h1>
 
       {error && <ErrorMessage message={error} />}

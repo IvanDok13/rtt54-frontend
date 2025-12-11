@@ -28,10 +28,15 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-3 text-white my-4'>
+    <form
+      onSubmit={handleSubmit}
+      className='border border-[#00ff88] p-4 rounded mb-10
+          shadow-[0_0_12px_#00ff88]
+          space-y-3'
+    >
       <div>
-        <label htmlFor='title' className='block text-sm mb-1'>
-          Title
+        <label htmlFor='title' className='text-[#66ffbb] text-sm capitalize'>
+          {'>'} TITLE
         </label>
         <input
           id='title'
@@ -40,26 +45,31 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
           onChange={handleChange}
           placeholder='Task title'
           required
-          className='w-full px-3 py-2 rounded-xl border dark:border-neutral-700 bg-white dark:bg-neutral-800 text-black'
+          className='w-full bg-black/80 border border-[#00ff88] rounded p-2
+            text-[#00ff88] focus:outline-none
+            shadow-[0_0_8px_#00ff88]'
         />
       </div>
 
       <div>
-        <label className='block text-sm mb-1'>Description</label>
+        <label className='text-[#66ffbb] text-sm'>{'>'} DESCRIPTION</label>
         <textarea
           id='description'
           name='description'
           value={form.description}
           onChange={handleChange}
           placeholder='Description'
-          className='w-full px-3 py-2 rounded-xl border dark:border-neutral-700 bg-white dark:bg-neutral-800 text-black'
+          className='w-full bg-black/80 border border-[#00ff88] rounded p-2
+            text-[#00ff88] focus:outline-none
+            shadow-[0_0_8px_#00ff88]'
         />
       </div>
 
       <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
         <div>
-          <label className='block text-sm mb-1'>Status</label>
+          <label className='text-[#66ffbb] text-sm mr-2'>{'>'} STATUS</label>
           <select
+            className='w-full bg-black/80 border border-[#00ff88] rounded p-2'
             id='status'
             name='status'
             value={form.status}
@@ -74,7 +84,8 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
 
       <div className='flex items-center gap-2'>
         <button
-          className='px-3 py-1 bg-yellow-600 hover:bg-yellow-700 rounded'
+          className='bg-[#fdf90a] text-black font-bold py-2 px-4 rounded
+            hover:bg-[#ffb700] transition shadow-[0_0_10px_#00ff88]'
           type='submit'
         >
           Add Task

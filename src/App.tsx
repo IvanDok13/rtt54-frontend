@@ -4,7 +4,7 @@ import { Navbar } from './components/Navbar';
 function App() {
   return (
     <>
-      <div className='p-5 bg-zinc-900 h-screen'>
+      <div className='p-5 bg-zinc-900'>
         <Navbar />
 
         <main>
