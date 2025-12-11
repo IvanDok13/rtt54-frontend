@@ -11,14 +11,22 @@ export function Navbar() {
     <nav className='text-white flex justify-between items-center w-full h-10'>
       <NavLink to='/'>Home</NavLink>
       <NavLink to='/projects'>Projects</NavLink>
-      <NavLink to='/login'>Signin/Signup</NavLink>
 
-      <button
-        onClick={logOut}
-        className='px-3 py-1 bg-red-600 hover:bg-red-700 rounded'
-      >
-        Logout
-      </button>
+      {auth.user ? (
+        <>
+          <span className='text-sm'>Hi, {auth.user.username}</span>
+          <button
+            onClick={logOut}
+            className='px-3 py-1 bg-red-600 hover:bg-red-700 rounded'
+          >
+            Logout
+          </button>
+        </>
+      ) : (
+        <>
+          <NavLink to='/login'>Signin/Signup</NavLink>
+        </>
+      )}
     </nav>
   );
 }
