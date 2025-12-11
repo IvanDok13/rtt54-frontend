@@ -13,12 +13,21 @@ export function ProjectPage() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
+  const [showSpinner, setShowSpinner] = useState(true);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setShowSpinner(false);
+    }, 8000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         setLoading(true);
         const res = await apiClient.get('/api/projects');
-        console.log(res.data);
         setProjects(res.data);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
@@ -32,13 +41,15 @@ export function ProjectPage() {
     fetchProjects();
   }, []);
 
-  if (loading) return <Spinner />;
+  if (loading || showSpinner) return <Spinner />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
+      setError('');
       setLoading(true);
+
       const res = await apiClient.post('/api/projects', { name, description });
       setProjects(prev => [...prev, res.data]);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,9 +62,12 @@ export function ProjectPage() {
       setDescription('');
     }
   };
+
   return (
     <div className='text-white'>
-      <h1 className='text-4xl font-bold text-white'>Projects</h1>
+      <h1 className='text-4xl font-bold'>Projects</h1>
+
+      {error && <ErrorMessage message={error} />}
 
       <form
         onSubmit={handleSubmit}
@@ -62,6 +76,7 @@ export function ProjectPage() {
         <label htmlFor='project-name'>Project Name: </label>
         <input
           type='text'
+          id='project-name'
           name='project-name'
           className='border'
           value={name}
@@ -71,6 +86,7 @@ export function ProjectPage() {
         <label htmlFor='project-description'>Project Description</label>
         <input
           type='text'
+          id='project-description'
           name='project-description'
           className='border'
           value={description}
@@ -87,22 +103,21 @@ export function ProjectPage() {
       {error && <ErrorMessage message={error} />}
 
       <div className='w-full flex gap-5 mt-10'>
-        {projects &&
-          projects.map(project => (
-            <div
-              key={project._id}
-              className='text-white w-50 flex flex-col h-50 border border-red-500 p-2 text-center rounded'
+        {projects.map(project => (
+          <div
+            key={project._id}
+            className='text-white w-50 flex flex-col h-50 border border-red-500 p-2 text-center rounded'
+          >
+            <div className='font-bold'>{project.name}</div>
+            <div>{project.description}</div>
+            <Link
+              to={`/projects/${project._id}`}
+              className='mt-auto inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md'
             >
-              <div className='font-bold'>{project.name}</div>
-              <div>{project.description}</div>
-              <Link
-                to={`/projects/${project._id}`}
-                className='mt-auto inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md'
-              >
-                See Project
-              </Link>
-            </div>
-          ))}
+              See Project
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );
