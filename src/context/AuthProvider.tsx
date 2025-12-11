@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { apiClient } from '../clients/api';
 import type { AuthContextType, AuthProviderProps, User } from '../types';
 
@@ -22,12 +22,22 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     try {
       const value = localStorage.getItem('token');
       if (value) {
-        return JSON.parse(value);
+        const parsed = JSON.parse(value);
+
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${parsed}`;
+
+        return parsed;
       } else return null;
     } catch (error) {
       console.error(error);
     }
   });
+
+  useEffect(() => {
+    if (token) {
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  }, [token]);
 
   const logIn = async (email: string, password: string) => {
     try {
