@@ -34,7 +34,6 @@ A sleek, modern web application for managing your personal projects and tasks. B
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
 - **Nodemon** - Development server auto-restart
-- **Concurrently** - Running multiple commands
 
 # Features
 
