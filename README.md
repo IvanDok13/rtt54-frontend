@@ -1,75 +1,25 @@
-# React + TypeScript + Vite
+# Projects Terminal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projects Terminal
+A sleek, modern web application for managing your personal projects and tasks. Built with a focus on simplicity and efficiency, Projects Terminal provides a clean interface for organizing your work, tracking progress, and staying productive.
 
-Currently, two official plugins are available:
+- **Features**
+  User Authentication: Secure login and registration with JWT-based authentication
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Project Management: Create, view, update, and delete your personal projects
 
-## React Compiler
+Task Organization: Add, manage, and track tasks within each project
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Responsive Design: Fully responsive layout that works on desktop, tablet, and mobile devices
 
-Note: This will impact Vite dev & build performances.
+Intuitive UI: Clean, modern interface with smooth interactions and visual feedback
 
-## Expanding the ESLint configuration
+Real-time Updates: Immediate reflection of changes without page reloads
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Deployment**
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+[Project: MERN Development](https://project-manager-app-rtt54.netlify.app/)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
