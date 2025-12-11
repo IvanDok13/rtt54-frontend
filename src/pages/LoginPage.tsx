@@ -1,6 +1,16 @@
-import { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ErrorMessage from '../components/ui/ErrorMessages';
+import Spinner from '../components/ui/Spinner';
+import { AuthContext } from '../context/AuthProvider';
 
 export function LoginPage() {
+  const auth = useContext(AuthContext);
+  if (!auth) throw new Error('AuthContext not found');
+
+  const { logIn, register } = auth;
+
   const [showRegister, setShowRegister] = useState(true);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -8,29 +18,33 @@ export function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       setError('');
       setLoading(true);
-      // api call here
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.error(error.message);
-      setError(error.message);
+
+      await logIn(email, password);
+      navigate('/projects');
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       setError('');
       setLoading(true);
-      // api call here
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.error(error.message);
-      setError(error.message);
+
+      await register(username, email, password);
+      navigate('/projects');
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -42,10 +56,8 @@ export function LoginPage() {
         Start managing your projects.
       </h1>
 
-      {/* ERROR  */}
-      {error && <div>{error}</div>}
+      {error && <ErrorMessage message={error} />}
 
-      {/* FORM  */}
       {showRegister ? (
         <form
           onSubmit={handleRegister}
@@ -58,10 +70,11 @@ export function LoginPage() {
             <input
               type='text'
               name='username'
-              id=''
+              id='username'
               value={username}
               onChange={e => setUsername(e.target.value)}
               className='ml-2 border rounded'
+              required
             />
           </label>
           <label htmlFor='email'>
@@ -69,10 +82,11 @@ export function LoginPage() {
             <input
               type='text'
               name='email'
-              id=''
+              id='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
               className='ml-10 border rounded'
+              required
             />
           </label>
           <label htmlFor='password'>
@@ -80,21 +94,23 @@ export function LoginPage() {
             <input
               type='password'
               name='password'
-              id=''
+              id='password'
               value={password}
               onChange={e => setPassword(e.target.value)}
               className='ml-3 border rounded'
+              required
             />
           </label>
 
-          <input
+          <button
             type='submit'
             value='Register'
             className='border py-2 px-4 rounded'
-          />
+          >
+            Register
+          </button>
 
-          {/* LOADING  */}
-          {loading && <div className='animate-pulse'>...</div>}
+          {loading && <Spinner />}
         </form>
       ) : (
         <form
@@ -107,10 +123,11 @@ export function LoginPage() {
             <input
               type='text'
               name='email'
-              id=''
+              id='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
               className='ml-10 border rounded'
+              required
             />
           </label>
           <label htmlFor='password'>
@@ -118,20 +135,22 @@ export function LoginPage() {
             <input
               type='password'
               name='password'
-              id=''
+              id='password'
               value={password}
               onChange={e => setPassword(e.target.value)}
               className='ml-3 border rounded'
+              required
             />
           </label>
-          <input
+          <button
             type='submit'
             value='Register'
             className='border py-2 px-4 rounded'
-          />
+          >
+            Login
+          </button>
 
-          {/* LOADING  */}
-          {loading && <div className='animate-pulse'>...</div>}
+          {loading && <Spinner />}
         </form>
       )}
 
