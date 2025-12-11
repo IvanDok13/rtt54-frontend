@@ -3,55 +3,38 @@
 Projects Terminal
 A sleek, modern web application for managing your personal projects and tasks. Built with a focus on simplicity and efficiency, Projects Terminal provides a clean interface for organizing your work, tracking progress, and staying productive.
 
-# Tech Stack:
+# Tech Stack
 
-**Frontend:**
-React - UI library
+## **Frontend:**
 
-TypeScript - Type safety
+- **React** - UI library
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling framework
+- **React Router** - Navigation
+- **Axios** - HTTP client
+- **React Query** - Data fetching
+- **React Hook Form** - Form handling
 
-Tailwind CSS - Styling framework
+## **Backend:**
 
-React Router - Navigation
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM library
+- **JWT** - Authentication
+- **bcrypt** - Password hashing
+- **Morgan** - HTTP request logging
 
-Axios - HTTP client
+## **Development & Tools:**
 
-React Query - Data fetching
-
-React Hook Form - Form handling
-
-**Backend**
-Node.js - Runtime environment
-
-Express.js - Web framework
-
-MongoDB - Database
-
-Mongoose - ODM library
-
-JWT - Authentication
-
-bcrypt - Password hashing
-
-Morgan - HTTP request logging
-
-**Development & Tools**
-
-Git - Version control
-
-npm / yarn - Package management
-
-Postman / Insomnia - API testing
-
-MongoDB Compass / Atlas - Database management
-
-ESLint - Code linting
-
-Prettier - Code formatting
-
-Nodemon - Development server auto-restart
-
-Concurrently - Running multiple commands
+- **Git** - Version control
+- **npm / yarn** - Package management
+- **Postman / Insomnia** - API testing
+- **MongoDB Compass / Atlas** - Database management
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Nodemon** - Development server auto-restart
+- **Concurrently** - Running multiple commands
 
 # Features
 
