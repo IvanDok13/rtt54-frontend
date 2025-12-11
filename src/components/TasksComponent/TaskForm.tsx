@@ -40,7 +40,7 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
           onChange={handleChange}
           placeholder='Task title'
           required
-          className='w-full px-3 py-2 rounded-xl border dark:border-neutral-700 bg-white dark:bg-neutral-800 text-black'
+          className='w-full px-3 py-2 rounded-xl border dark:border-neutral-700 bg-white dark:bg-neutral-800 text-white'
         />
       </div>
 
@@ -52,7 +52,7 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
           value={form.description}
           onChange={handleChange}
           placeholder='Description'
-          className='w-full px-3 py-2 rounded-xl border dark:border-neutral-700 bg-white dark:bg-neutral-800 text-black'
+          className='w-full px-3 py-2 rounded-xl border dark:border-neutral-700 bg-white dark:bg-neutral-800 text-white'
         />
       </div>
 
