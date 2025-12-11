@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiClient } from '../clients/api';
@@ -16,10 +17,7 @@ export function ProjectPage() {
   const [showSpinner, setShowSpinner] = useState(true);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setShowSpinner(false);
-    }, 8000);
-
+    const timer = window.setTimeout(() => setShowSpinner(false), 8000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -29,9 +27,7 @@ export function ProjectPage() {
         setLoading(true);
         const res = await apiClient.get('/api/projects');
         setProjects(res.data);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
-        console.log(error);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -47,14 +43,10 @@ export function ProjectPage() {
     e.preventDefault();
 
     try {
-      setError('');
       setLoading(true);
-
       const res = await apiClient.post('/api/projects', { name, description });
       setProjects(prev => [...prev, res.data]);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error(error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -63,59 +55,127 @@ export function ProjectPage() {
     }
   };
 
+  const handleDelete = async (projectId: string) => {
+    try {
+      setError('');
+      setLoading(true);
+      await apiClient.delete(`/api/projects/${projectId}`);
+      setProjects(prev => prev.filter(task => task._id !== projectId));
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className='text-white'>
-      <h1 className='text-4xl font-bold'>Projects</h1>
+    <div
+      className='
+        min-h-screen p-6 relative
+        bg-[#0a0f0a] text-[#00ff88]
+        font-mono
+      '
+    >
+      <div
+        className='
+          pointer-events-none absolute inset-0
+          opacity-20
+          bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.35)_51%)]
+          bg-[length:100%_4px]
+        '
+      />
+
+      <h1 className='text-4xl mb-6 font-bold tracking-widest flex items-center gap-2 drop-shadow-[0_0_6px_#00ff88]'>
+        <span className='animate-pulse'>█</span> PROJECT TERMINAL
+      </h1>
 
       {error && <ErrorMessage message={error} />}
 
       <form
         onSubmit={handleSubmit}
-        className=' border p-2 h-50 mt-10 flex flex-col gap-2 rounded'
+        className='
+          border border-[#00ff88] p-4 rounded mb-10
+          shadow-[0_0_12px_#00ff88]
+          space-y-3
+        '
       >
-        <label htmlFor='project-name'>Project Name: </label>
+        <label className='text-[#66ffbb] text-sm'>{'>'} PROJECT NAME</label>
         <input
           type='text'
-          id='project-name'
-          name='project-name'
-          className='border'
+          className='
+            w-full bg-black/80 border border-[#00ff88] rounded p-2
+            text-[#00ff88] focus:outline-none
+            shadow-[0_0_8px_#00ff88]
+          '
           value={name}
           onChange={e => setName(e.target.value)}
         />
 
-        <label htmlFor='project-description'>Project Description</label>
-        <input
-          type='text'
-          id='project-description'
-          name='project-description'
-          className='border'
-          value={description}
+        <label className='text-[#66ffbb] text-sm'>
+          {'>'} PROJECT DESCRIPTION
+        </label>
+        <textarea
+          className='
+            w-full bg-black/80 border border-[#00ff88] rounded p-2
+            text-[#00ff88] focus:outline-none
+            shadow-[0_0_8px_#00ff88]
+          '
           onChange={e => setDescription(e.target.value)}
-        />
+          value={description}
+        ></textarea>
 
-        <input
+        <button
           type='submit'
-          value='Create Project'
-          className='mt-auto inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md'
-        />
+          className='
+            bg-[#00ff88] text-black font-bold py-2 px-4 rounded
+            hover:bg-[#00ffaa] transition shadow-[0_0_10px_#00ff88]
+          '
+        >
+          CREATE PROJECT
+        </button>
       </form>
 
-      {error && <ErrorMessage message={error} />}
+      <h2 className='text-2xl mb-4 tracking-wide'>{'>'} ACTIVE PROJECTS</h2>
 
-      <div className='w-full flex gap-5 mt-10'>
+      <div className='flex flex-wrap gap-6'>
         {projects.map(project => (
           <div
             key={project._id}
-            className='text-white w-50 flex flex-col h-50 border border-red-500 p-2 text-center rounded'
+            className='
+              p-4 border border-[#00ff88] rounded w-64 bg-black/20
+              shadow-[0_0_10px_#00ff88]
+            '
           >
-            <div className='font-bold'>{project.name}</div>
-            <div>{project.description}</div>
-            <Link
-              to={`/projects/${project._id}`}
-              className='mt-auto inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md'
-            >
-              See Project
-            </Link>
+            <div className='font-bold text-[#00ffcc] drop-shadow-[0_0_4px_#00ffcc]'>
+              {project.name}
+            </div>
+
+            <p className='text-sm text-[#66ffbb] mt-1 w-full'>
+              {project.description}
+            </p>
+
+            <div className='flex flex-row gap-4'>
+              <Link
+                to={`/projects/${project._id}`}
+                className='
+                mt-4 inline-block bg-[#00ff88] text-black font-semibold 
+                py-2 px-4 rounded shadow-[0_0_10px_#00ff88]
+                hover:bg-[#00ffaa] transition
+              '
+              >
+                OPEN →
+              </Link>
+
+              <button
+                onClick={() => handleDelete(project._id)}
+                className='
+              mt-4 inline-block bg-[#cd3838] text-black font-semibold 
+                py-2 px-4 rounded shadow-[0_0_10px_#00ff88]
+                hover:bg-[#f60707] transition'
+              >
+                DELETE
+              </button>
+            </div>
           </div>
         ))}
       </div>
